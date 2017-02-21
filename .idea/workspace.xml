@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3e35cd8e-39a4-44b1-b66b-67cc9947328d" name="Default" comment="" />
+    <list default="true" id="3e35cd8e-39a4-44b1-b66b-67cc9947328d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tmp/debug_kit.sqlite" afterPath="$PROJECT_DIR$/tmp/debug_kit.sqlite" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/MiddleChaptersController.php" afterPath="$PROJECT_DIR$/src/Controller/MiddleChaptersController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/SmallChaptersController.php" afterPath="$PROJECT_DIR$/src/Controller/SmallChaptersController.php" />
+    </list>
     <ignored path="013_st.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -39,36 +44,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.ctp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Template/Studies/index.ctp">
+      <file leaf-file-name="MiddleChaptersController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Controller/MiddleChaptersController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-              <folding>
-                <element signature="e#1871#1877#0#HTML" expanded="true" />
-                <element signature="e#1878#1884#0#HTML" expanded="true" />
-                <element signature="e#2295#2301#0#HTML" expanded="true" />
-                <element signature="e#2302#2308#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webroot/css/style.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
+            <state relative-caret-position="482">
+              <caret line="164" column="0" selection-start-line="157" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StudiesController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Controller/StudiesController.php">
+      <file leaf-file-name="SmallChaptersController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Controller/SmallChaptersController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="75" column="25" selection-start-line="75" selection-start-column="25" selection-end-line="75" selection-end-column="25" />
+            <state relative-caret-position="404">
+              <caret line="133" column="33" selection-start-line="133" selection-start-column="33" selection-end-line="133" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -108,6 +98,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -123,8 +116,6 @@
         <option value="$PROJECT_DIR$/src/Template/BigChapters/index.ctp" />
         <option value="$PROJECT_DIR$/src/Template/MiddleChapters/index.ctp" />
         <option value="$PROJECT_DIR$/src/Template/MiddleChapters/add.ctp" />
-        <option value="$PROJECT_DIR$/src/Controller/MiddleChaptersController.php" />
-        <option value="$PROJECT_DIR$/src/Controller/SmallChaptersController.php" />
         <option value="$PROJECT_DIR$/src/Template/SmallChapters/add.ctp" />
         <option value="$PROJECT_DIR$/src/Template/Studies/add.ctp" />
         <option value="$PROJECT_DIR$/src/Template/Studies/edit.ctp" />
@@ -138,6 +129,8 @@
         <option value="$PROJECT_DIR$/src/Template/Studies/index.ctp" />
         <option value="$PROJECT_DIR$/webroot/css/style.css" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/Controller/MiddleChaptersController.php" />
+        <option value="$PROJECT_DIR$/src/Controller/SmallChaptersController.php" />
       </list>
     </option>
   </component>
@@ -178,7 +171,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -200,11 +192,12 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../db/mysql/cake_013" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../8005_Index/030_v" />
     <property name="js-jscs-nodeInterpreter" value="$USER_HOME$/.nodebrew/current/bin/node" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL&#10;Database Driver" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
@@ -277,12 +270,13 @@
       <workItem from="1487329116193" duration="2332000" />
       <workItem from="1487490221260" duration="10470000" />
       <workItem from="1487595272788" duration="6908000" />
-      <workItem from="1487674776333" duration="2354000" />
+      <workItem from="1487674776333" duration="3463000" />
+      <workItem from="1487687957530" duration="1044000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78763000" />
+    <option name="totallyTimeSpent" value="80916000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1366" height="741" extended-state="6" />
@@ -326,23 +320,11 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Template/SmallChapters/add.ctp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
-          <folding>
-            <marker date="1487504450000" expanded="true" signature="2123:2165" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/SmallChaptersController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#33#66#0#PHP" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -350,9 +332,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
-          <folding>
-            <marker date="1487504450000" expanded="true" signature="2123:2165" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -367,9 +346,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
-          <folding>
-            <marker date="1486870279000" expanded="true" signature="1983:2029" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -377,9 +353,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#33#66#0#PHP" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -394,9 +368,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
-          <folding>
-            <marker date="1486870279000" expanded="true" signature="1983:2029" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -404,9 +375,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#33#66#0#PHP" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -430,9 +399,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
-          <folding>
-            <element signature="e#33#66#0#PHP" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -565,21 +532,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/MiddleChaptersController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="157" column="0" selection-start-line="147" selection-start-column="0" selection-end-line="157" selection-end-column="0" />
-          <folding>
-            <element signature="e#33#66#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Template/SmallChapters/edit.ctp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="5" column="28" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -601,7 +557,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="32" column="61" selection-start-line="32" selection-start-column="40" selection-end-line="32" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -609,9 +564,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="545">
           <caret line="61" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding>
-            <marker date="1487504450000" expanded="true" signature="2123:2165" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -619,7 +571,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="31" column="74" selection-start-line="31" selection-start-column="74" selection-end-line="31" selection-end-column="74" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -627,7 +578,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="33" column="68" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="68" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -635,7 +585,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -643,9 +592,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="530">
           <caret line="68" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding>
-            <marker date="1486870279000" expanded="true" signature="1983:2029" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -675,21 +621,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/SmallChaptersController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="870">
-          <caret line="58" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-          <folding>
-            <element signature="e#33#66#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Template/Layout/default.ctp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
           <caret line="30" column="31" selection-start-line="30" selection-start-column="31" selection-end-line="30" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -707,7 +642,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/StudiesController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
+        <state relative-caret-position="1110">
           <caret line="75" column="25" selection-start-line="75" selection-start-column="25" selection-end-line="75" selection-end-column="25" />
           <folding />
         </state>
@@ -715,14 +650,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Template/Studies/index.ctp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
+        <state relative-caret-position="825">
           <caret line="57" column="0" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding>
-            <element signature="e#1871#1877#0#HTML" expanded="true" />
-            <element signature="e#1878#1884#0#HTML" expanded="true" />
-            <element signature="e#2295#2301#0#HTML" expanded="true" />
-            <element signature="e#2302#2308#0#HTML" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -730,6 +660,35 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/MiddleChaptersController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="482">
+          <caret line="164" column="0" selection-start-line="157" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/665f9592/6f39340a-9d04-4d16-9a00-6d5a5023cf85/cake_013.statuses">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/SmallChaptersController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="133" column="33" selection-start-line="133" selection-start-column="33" selection-end-line="133" selection-end-column="33" />
           <folding />
         </state>
       </provider>

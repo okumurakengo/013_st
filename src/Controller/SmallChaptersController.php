@@ -129,6 +129,14 @@ class SmallChaptersController extends AppController
                 ->order(['MiddleChapters.display_order' => 'DESC'])
                 ->order(['SmallChapters.display_order' => 'DESC'])
                 ->first()->MiddleChapters->id;
+        } else {
+            // middle_chaptersにデータがない場合は最初の大分類を持ってくる
+            $searchMiddleChapters = TableRegistry::get('MiddleChapters')
+                ->find('all', ['contain' => ['BigChapters' => ['Books']]])
+                ->select(['id'])
+                ->where("Books.id = $searchBooks")
+                ->order(['MiddleChapters.display_order' => 'DESC'])
+                ->first()->id;
         }
         if ($this->request->is('post')) {
             $searchMiddleChapters = $this->request->data['middle_chapter_id'];

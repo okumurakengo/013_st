@@ -38,8 +38,8 @@ class MiddleChaptersController extends AppController
             ],
             'limit' => 100
         ];
-        $MiddleChapters = TableRegistry::get('Books');
-        $BookId = $MiddleChapters
+        $Books = TableRegistry::get('Books');
+        $BookId = $Books
                     ->find()
                     ->select(['id'])
                     ->order(['display_order' => 'ASC'])
@@ -154,6 +154,14 @@ class MiddleChaptersController extends AppController
                 ->order(['BigChapters.display_order' => 'DESC'])
                 ->order(['MiddleChapters.display_order' => 'DESC'])
                 ->first()->BigChapters->id;
+        } else {
+            // middle_chaptersにデータがない場合は最初の大分類を持ってくる
+            $searchBigChapters = TableRegistry::get('BigChapters')
+                ->find('all', ['contain' => ['Books']])
+                ->select(['id'])
+                ->where("Books.id = $searchBooks")
+                ->order(['BigChapters.display_order' => 'DESC'])
+                ->first()->id;
         }
         if ($this->request->is('post')) {
             $searchBigChapters = $this->request->data['big_chapter_id'];
