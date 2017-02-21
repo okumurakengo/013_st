@@ -3,6 +3,8 @@
 /vendor/*
 /config/app.php
 
+/.idea/*
+
 /tmp/cache/models/*
 !/tmp/cache/models/empty
 /tmp/cache/persistent/*
@@ -24,4 +26,3 @@
 /app/Config/database.php
 /vendors/*
 
-/app/.idea/*
