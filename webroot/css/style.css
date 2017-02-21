@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+.non_target,
+.non_target .study_content {
+    background: #eee !important;
+}
+
+.study_content {
+    box-shadow: none;
+    line-height: .7rem;
+    margin: 0;
+}
