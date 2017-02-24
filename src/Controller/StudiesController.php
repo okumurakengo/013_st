@@ -173,12 +173,25 @@ class StudiesController extends AppController
         foreach ($arrSmallChapters as $value) {
             $selectSmallChapters[$value['middle_chapter']['display_order'] . '. ' . $value['middle_chapter']['title']][$value['id']] = $value['display_order'] . ". " . $value['title'];
         }
-        $searchSmallChapters = $this->Studies
-            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
-            ->select(['SmallChapters.id'])
-            ->where("books.id = $searchBooks")
-            ->order(['Studies.modified' => 'DESC'])
-            ->first()->SmallChapters->id;
+        $searchSmallChapters = TableRegistry::get('SmallChapters')
+            ->find('all', ['contain'=>['MiddleChapters'=>['BigChapters'=>['Books']]]])
+            ->select(['id'])
+            ->where("Books.id = $searchBooks")
+            ->order(['MiddleChapters.display_order' => 'ASC'])
+            ->order(['SmallChapters.display_order' => 'ASC'])
+            ->first()->id;
+        $sChapter_cnt = TableRegistry::get('SmallChapters')
+            ->find('all', ['contain'=>['MiddleChapters'=>['BigChapters'=>['Books']]]])
+            ->where("Books.id = $searchBooks")
+            ->count();
+        if ($sChapter_cnt !== 0) {
+            $searchSmallChapters = $this->Studies
+                ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
+                ->select(['SmallChapters.id'])
+                ->where("books.id = $searchBooks")
+                ->order(['Studies.modified' => 'DESC'])
+                ->first()->SmallChapters->id;
+        }
         $this->set(compact(
             'selectBooks',
             'searchBooks',
