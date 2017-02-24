@@ -90,7 +90,7 @@ class BigChaptersController extends AppController
     public function add()
     {
         $bigChapter = $this->BigChapters->newEntity();
-        if ($this->request->is('post')) {
+        if ($this->request->is('post') && empty($this->request->data['search'])) {
             $bigChapter = $this->BigChapters->patchEntity($bigChapter, $this->request->data);
             if ($this->BigChapters->save($bigChapter)) {
                 $this->Flash->success(__('The big chapter has been saved.'));
@@ -102,7 +102,42 @@ class BigChaptersController extends AppController
         $books = $this->BigChapters->Books
             ->find('list', ['limit' => 200])
             ->order(['display_order' => 'ASC']);
-        $this->set(compact('bigChapter', 'books'));
+        // 検索フォーム
+        // 技術書名
+        $Books = TableRegistry::get('Books');
+        $searchBooks = $Books
+            ->find()
+            ->select(['id'])
+            ->order(['display_order' => 'ASC'])
+            ->first()
+            ->id;
+        if (isset($this->request->data['search'])) {
+            $searchBooks = $this->request->data['books'];
+        }
+        $arrBooks = TableRegistry::get('Books')
+            ->find()
+            ->select(['id', 'display_order', 'title'])
+            ->order(['books.display_order' => 'ASC']);
+        foreach ($arrBooks as $value) {
+            $selectBooks[$value['id']] = $value['display_order'] . ". " . $value['title'];
+        }
+        // 表示順番のプルダウン
+        $query = $this->BigChapters
+            ->find('all', ['contain' => ['Books']])
+            ->select(['id','title','display_order'])
+            ->where("books.id = $searchBooks")
+            ->order(['BigChapters.display_order' => 'ASC']);
+        $select_display_order[1] = "最初に表示する";
+        foreach ($query as $value) {
+            $select_display_order[$value['display_order'] + 1] = '「' . $value['display_order'] . '. ' . $value['title'] . '」の次に表示する';
+        }
+        $this->set(compact(
+            'bigChapter',
+            'books',
+            'searchBooks',
+            'selectBooks',
+            'select_display_order'
+        ));
         $this->set('_serialize', ['bigChapter']);
     }
 
