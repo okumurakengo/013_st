@@ -60,7 +60,7 @@
                 </td>
             </tr>
             <tr class="<?= $tr_class ?>">
-                <td colspan="4"><pre class="study_content"><?= nl2br(h($study->content)) ?></pre></td>
+                <td colspan="4"><pre class="study_content"><?= nl2br($study->content) ?></pre></td>
             </tr>
             <tr class="<?= $tr_class ?>">
                 <td>
