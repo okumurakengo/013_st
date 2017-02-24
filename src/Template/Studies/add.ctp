@@ -11,7 +11,7 @@
             <div class="medium-2 columns">技術書名</div>
             <div class="medium-10 columns"><?= $this->Form->select('books', $selectBooks, [$searchBooks, 'id'=>'books']) ?></div>
             <div class="medium-2 columns">大分類</div>
-            <div class="medium-10 columns"><?= $this->Form->select('big_chapters', $selectBigChapters, [$searchBigChapters, 'id'=>'big_chapters']) ?></div>
+            <div class="medium-10 columns"><?= $this->Form->select('big_chapters', $selectBigChapters, ['id'=>'big_chapters', 'default'=>$searchBigChapters]) ?></div>
         </div>
         <input type="hidden" id="big_chapters_flg" name="big_chapters_flg" value="0">
         <?=$this->Form->hidden('search' ,['value'=> 'search' ]) ?>
@@ -28,7 +28,7 @@
                 ステータス<?= $this->Form->select('status_id', $statuses, ['default' => 5]); ?>
             </div>
             <div class="medium-8 columns end">
-                小分類<?= $this->Form->select('small_chapter_id',$selectSmallChapters, ['id'=>'small_chapters']) ?>
+                小分類<?= $this->Form->select('small_chapter_id',$selectSmallChapters, ['id'=>'small_chapters', 'default'=>$searchSmallChapters]) ?>
             </div>
         </div>
         内容<?= $this->Form->textarea('content', ['rows' => '10']); ?>

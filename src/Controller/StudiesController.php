@@ -121,12 +121,12 @@ class StudiesController extends AppController
             ->where("Books.id = $searchBooks")
             ->count();
         if ($bChapter_cnt !== 0) {
-            $searchBigChapters = $BigChapters
-                ->find('all', ['contain' => ['Books']])
+            $searchBigChapters = $this->Studies
+                ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
                 ->select(['BigChapters.id'])
                 ->where("books.id = $searchBooks")
-                ->order(['BigChapters.display_order' => 'ASC'])
-                ->first()->id;
+                ->order(['Studies.modified' => 'DESC'])
+                ->first()->BigChapters->id;
         }
         if (isset($this->request->data['big_chapters_flg']) && $this->request->data['big_chapters_flg'] === '1') {
             $searchBigChapters = $this->request->data['big_chapters'];
@@ -173,12 +173,19 @@ class StudiesController extends AppController
         foreach ($arrSmallChapters as $value) {
             $selectSmallChapters[$value['middle_chapter']['display_order'] . '. ' . $value['middle_chapter']['title']][$value['id']] = $value['display_order'] . ". " . $value['title'];
         }
+        $searchSmallChapters = $this->Studies
+            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
+            ->select(['SmallChapters.id'])
+            ->where("books.id = $searchBooks")
+            ->order(['Studies.modified' => 'DESC'])
+            ->first()->SmallChapters->id;
         $this->set(compact(
             'selectBooks',
             'searchBooks',
             'selectBigChapters',
             'searchBigChapters',
-            'selectSmallChapters'
+            'selectSmallChapters',
+            'searchSmallChapters'
         ));
 
         $users = $this->Studies->Users->find('list', ['limit' => 200]);
