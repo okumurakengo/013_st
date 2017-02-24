@@ -25,7 +25,7 @@
                 <?= $this->Form->input('user_id', ['options' => $users]); ?>
             </div>
             <div class="medium-2 columns">
-                ステータス<?= $this->Form->select('status_id', $statuses); ?>
+                ステータス<?= $this->Form->select('status_id', $statuses, ['default' => 5]); ?>
             </div>
             <div class="medium-8 columns end">
                 小分類<?= $this->Form->select('small_chapter_id',$selectSmallChapters, ['id'=>'small_chapters']) ?>
