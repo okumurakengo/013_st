@@ -29,7 +29,7 @@
             echo $this->Form->input('user_id', ['options' => $users]);
             echo $this->Form->input('small_chapter_id', ['options' => $smallChapters]);
             echo $this->Form->input('status_id', ['options' => $statuses]);
-            echo nl2br($this->Form->textarea('content', ['rows' => '10']));
+            echo $this->Form->textarea('content', ['rows' => '10']);
             echo $this->Form->input('memo');
             echo $this->Form->input('display_order');
             echo $this->Form->input('select_flg');
