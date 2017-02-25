@@ -7,7 +7,7 @@
 
 .study_content {
     box-shadow: none;
-    line-height: .7rem;
+    line-height: 1rem;
     margin: 0;
 }
 
@@ -17,4 +17,7 @@ code {
     box-sizing: border-box;
     display: block;
     padding: 1em;
+}
+math {
+    display: inline-block;
 }
