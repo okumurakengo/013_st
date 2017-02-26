@@ -3,15 +3,8 @@
   * @var \App\View\AppView $this
   */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Book'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Big Chapters'), ['controller' => 'BigChapters', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Big Chapter'), ['controller' => 'BigChapters', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="books index large-9 medium-8 columns content">
+<div class="books index content">
+    <p style="float:right;"><?= $this->Html->link('追加', ['action' => 'add'], ['class'=>'button small radius']) ?></p>
     <h3><?= __('Books') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <col width="50">
@@ -29,7 +22,13 @@
         <tbody>
             <?php foreach ($books as $book): ?>
             <tr>
-                <td><?= h($book->title) ?></td>
+                <td>
+                <?php if($book->url !== ''): ?>
+                    <a href="<?= h($book->url) ?>" target="_blank"><?= h($book->title) ?></a>
+                <?php else: ?>
+                    <?= h($book->title) ?>
+                <?php endif; ?>
+                </td>
                 <td><?= h($book->created->format('Y年m月d日H:i')) ?></td>
                 <td><?= h($book->modified->format('Y年m月d日H:i')) ?></td>
                 <td class="actions">
