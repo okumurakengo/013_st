@@ -120,13 +120,23 @@ class StudiesController extends AppController
             ->find('all', ['contain' =>['Books']])
             ->where("Books.id = $searchBooks")
             ->count();
-        if ($bChapter_cnt !== 0) {
+        $study_cnt = $this->Studies
+            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
+            ->where("Books.id = $searchBooks")
+            ->count();
+        if ($bChapter_cnt !== 0 && $study_cnt !== 0) {
             $searchBigChapters = $this->Studies
                 ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
                 ->select(['BigChapters.id'])
                 ->where("books.id = $searchBooks")
                 ->order(['Studies.modified' => 'DESC'])
                 ->first()->BigChapters->id;
+        } else {
+            $searchBigChapters = $BigChapters
+                ->find('all',['contain'=>['Books']])
+                ->where("books.id = $searchBooks")
+                ->order(['BigChapters.display_order'=>'ASC'])
+                ->first()->id;
         }
         if (isset($this->request->data['big_chapters_flg']) && $this->request->data['big_chapters_flg'] === '1') {
             $searchBigChapters = $this->request->data['big_chapters'];
@@ -176,19 +186,19 @@ class StudiesController extends AppController
         $searchSmallChapters = TableRegistry::get('SmallChapters')
             ->find('all', ['contain'=>['MiddleChapters'=>['BigChapters'=>['Books']]]])
             ->select(['id'])
-            ->where("Books.id = $searchBooks")
+            ->where("Books.id = {$searchBooks}")
             ->order(['MiddleChapters.display_order' => 'ASC'])
             ->order(['SmallChapters.display_order' => 'ASC'])
             ->first()->id;
         $sChapter_cnt = TableRegistry::get('SmallChapters')
             ->find('all', ['contain'=>['MiddleChapters'=>['BigChapters'=>['Books']]]])
-            ->where("Books.id = $searchBooks")
+            ->where("Books.id = {$searchBooks}")
             ->count();
-        if ($sChapter_cnt !== 0) {
+        if ($sChapter_cnt !== 0 && $study_cnt !== 0) {
             $searchSmallChapters = $this->Studies
                 ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
                 ->select(['SmallChapters.id'])
-                ->where("books.id = $searchBooks")
+                ->where("books.id = {$searchBooks}")
                 ->order(['Studies.modified' => 'DESC'])
                 ->first()->SmallChapters->id;
         }
