@@ -19,25 +19,8 @@
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($books as $book): ?>
-            <tr>
-                <td>
-                <?php if($book->url !== ''): ?>
-                    <a href="<?= h($book->url) ?>" target="_blank"><?= h($book->title) ?></a>
-                <?php else: ?>
-                    <?= h($book->title) ?>
-                <?php endif; ?>
-                </td>
-                <td><?= h($book->created->format('Y年m月d日H:i')) ?></td>
-                <td><?= h($book->modified->format('Y年m月d日H:i')) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $book->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $book->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $book->id], ['confirm' => __('Are you sure you want to delete # {0}?', $book->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
+        <tbody class="tableish">
+            <?= $this->element('book_list') ?>
         </tbody>
     </table>
     <div class="paginator">
@@ -51,3 +34,49 @@
         <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
     </div>
 </div>
+<script>
+    $(function() {
+        var oldRanks = [];
+        // 画面の中のrank一覧を保持
+        $("table .item_box").each(function () {
+            oldRanks.push(this.dataset.rank);
+        });
+
+        $(".tableish").sortable({
+            items: '> .item_box',
+            cursor: '-webkit-grabbing',
+            stop: function(event, ui){
+                $("body").append($('<div class="modal-backdrop in"></div>'));
+                var book_id = ui.item.data('book-id');
+                var src_display_order = ui.item.data('rank');
+                var display_order;
+                $("table .item_box").each(function () {
+                    if ($(this).data('rank') === src_display_order) {
+                        display_order = $("table .item_box").index(this) + 1;
+                    };
+                });
+                updateRank(book_id,src_display_order,display_order);
+            },
+        });
+
+        var updateRank = function(book_id,src_display_order,display_order) {
+
+            $.ajax({
+                url: '<?= $this->Url->build(['controller'=>'Books', 'action'=>'ajax']); ?>',
+                type: 'POST',
+                data: {
+                    book_id           : book_id,
+                    src_display_order : src_display_order,
+                    display_order     : display_order
+                },
+            }).done(function(data) {
+                $('.tableish').empty().html(data);
+                $(".modal-backdrop").remove();
+            }).fail(function() {
+                console.log('fail');
+                $(".modal-backdrop").remove();
+            });
+        };
+
+    });
+</script>
