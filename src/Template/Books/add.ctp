@@ -17,7 +17,7 @@
         <legend><?= __('Add Book') ?></legend>
         <?php
         echo $this->Form->input('title');
-        echo $this->Form->input('url');
+        echo $this->Form->input('url',['maxlength' => 150]);
             echo $this->Form->select('display_order',$select_display_order);
         ?>
     </fieldset>
