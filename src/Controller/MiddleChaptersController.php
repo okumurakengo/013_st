@@ -160,7 +160,7 @@ class MiddleChaptersController extends AppController
                 ->find('all', ['contain' => ['Books']])
                 ->select(['id'])
                 ->where("Books.id = $searchBooks")
-                ->order(['BigChapters.display_order' => 'DESC'])
+                ->order(['BigChapters.display_order' => 'ASC'])
                 ->first()->id;
         }
         if ($this->request->is('post')) {
