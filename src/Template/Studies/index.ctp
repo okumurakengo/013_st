@@ -60,12 +60,9 @@
                 </td>
             </tr>
             <tr class="<?= $tr_class ?>">
-                <td colspan="4"><pre class="study_content"><?=
-                        str_replace(
-                            ['<code>','</code>'],
-                            ['<code><math><![CDATA[',']]></math></code>'],
-                            $study->content) ?>
-                    </pre></td>
+                <td class="study_content" colspan="4">
+                    <?= \Michelf\Markdown::defaultTransform($study->content)?>
+                </td>
             </tr>
             <tr class="<?= $tr_class ?>">
                 <td>

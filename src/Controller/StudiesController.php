@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+require_once ROOT . '/php-markdown/Michelf/Markdown.inc.php';
 
 /**
  * Studies Controller

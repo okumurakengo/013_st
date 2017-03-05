@@ -10,16 +10,22 @@
     line-height: 1rem;
     margin: 0;
 }
-
-code {
-    background: #e9e9e9;
-    border-radius: 5px;
-    box-sizing: border-box;
-    display: block;
-    padding: 1em;
+.study_content p {
+    font-size: 1em;
+    margin: 0;
 }
-math {
-    display: inline-block;
+
+blockquote {
+    border-left: 1px solid #ccc;
+    margin: 0 0 0 .5em;
+    padding: 0 0 0 .5em;
+}
+code {
+    background: #ddd;
+    border: 1px solid #666;
+    display: block;
+    padding: .5em;
+    width: 80%;
 }
 
 .item_box{
