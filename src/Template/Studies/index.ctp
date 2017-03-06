@@ -61,7 +61,7 @@
             </tr>
             <tr class="<?= $tr_class ?>">
                 <td class="study_content" colspan="4">
-                    <?= \Michelf\Markdown::defaultTransform($study->content)?>
+                    <pre><?= \Michelf\Markdown::defaultTransform($study->content)?></pre>
                 </td>
             </tr>
             <tr class="<?= $tr_class ?>">
