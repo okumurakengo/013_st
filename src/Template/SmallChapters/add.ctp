@@ -42,6 +42,8 @@
 </div>
 <script>
 
+    $('#title').focus();
+
     var books = document.getElementById('books');
     var middle_chapters = document.getElementById('middle_chapters');
     var target = document.getElementById('search');
