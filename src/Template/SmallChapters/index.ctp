@@ -56,6 +56,8 @@
 </div>
 <script>
 
+    $('.button').focus();
+
     var books = document.getElementById('books');
     var target = document.getElementById('search');
     books.onchange = function(){

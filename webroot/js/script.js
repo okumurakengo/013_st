@@ -1,0 +1,5 @@
+$(function() {
+
+    $('#focus').focus();
+
+});

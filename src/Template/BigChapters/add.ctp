@@ -28,7 +28,7 @@
     <fieldset>
         <legend><?= __('Add Big Chapter') ?></legend>
         <?php
-            echo $this->Form->input('title');
+            echo $this->Form->input('title',['id'=>'focus']);
             echo $this->Form->select('display_order',$select_display_order,['default' => [count($select_display_order)]]);
             echo $this->Form->input('select_flg');
         ?>
