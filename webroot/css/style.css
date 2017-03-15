@@ -53,3 +53,7 @@ code {
     background-color:#000;
     opacity:.3;
 }
+
+.add_button {
+    float: right;
+}

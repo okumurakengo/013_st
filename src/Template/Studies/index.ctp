@@ -13,7 +13,9 @@
         </div>
     </fieldset>
     <?= $this->Form->end() ?>
-    <p style="float:right;"><?= $this->Html->link('追加', ['action' => 'add'], ['class'=>'button small radius']) ?></p>
+    <p class="add_button">
+        <?= $this->Html->link('追加', ['action' => 'add'], ['id'=>'focus','class'=>'button small radius']) ?>
+    </p>
     <h3><?= __('Studies') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <col width="5">

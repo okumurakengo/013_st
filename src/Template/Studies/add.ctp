@@ -31,7 +31,7 @@
                 小分類<?= $this->Form->select('small_chapter_id',$selectSmallChapters, ['id'=>'small_chapters', 'default'=>$searchSmallChapters]) ?>
             </div>
         </div>
-        内容<?= $this->Form->textarea('content', ['rows' => '10']); ?>
+        内容<?= $this->Form->textarea('content', ['id'=>'focus','rows' => '10']); ?>
         メモ<?= $this->Form->textarea('memo', ['rows' => '7']); ?>
         <?= $this->Form->input('display_order'); ?>
         <?= $this->Form->input('select_flg'); ?>
