@@ -14,6 +14,7 @@ $(function() {
     var t_keyCode = 84;
     var up_keyCode = 38;
     var down_keyCode = 40;
+    var json_data = $('#json_data').length > 0 ? JSON.parse($('#json_data').html()) : '';
     $(window).keydown(function(e){
         if(e.ctrlKey){
             switch (e.keyCode) {
@@ -30,14 +31,15 @@ $(function() {
         }
 
         // プルダウン選択ショートカット
-        var json_data = JSON.parse($('#json_data').html());
-        var select_small_chapter = $('#small_chapters').val();
-        var select_number = $.inArray(select_small_chapter, json_data);
+        var pull_keydown = $('.pull_keydown').val();
+        var select_number = $.inArray(parseInt(pull_keydown), json_data);
         if (e.keyCode === down_keyCode) {
-            $('#small_chapters').val(json_data[select_number + 1]);
+            $('.pull_keydown').val(json_data[select_number + 1]);
+            $('.pull_change').submit();
             return false;
         } else if (e.keyCode === up_keyCode) {
-            $('#small_chapters').val(json_data[select_number - 1]);
+            $('.pull_keydown').val(json_data[select_number - 1]);
+            $('.pull_change').submit();
             return false;
         }
     });

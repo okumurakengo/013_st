@@ -190,12 +190,15 @@ class SmallChaptersController extends AppController
             ->order(['MiddleChapters.display_order' => 'ASC']);
         foreach ($arrMiddleChapters as $value) {
             $selectMiddleChapters[$value['big_chapter']['display_order'] . '. ' . $value['big_chapter']['title']][$value['id']] = $value['display_order'] . ". " . $value['title'];
+            $jsonMiddleChapters[] = $value['id'];
         }
+        $jsonMiddleChapters = json_encode($jsonMiddleChapters, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         $this->set(compact(
             'selectBooks',
             'searchBooks',
             'selectMiddleChapters',
-            'searchMiddleChapters'
+            'searchMiddleChapters',
+            'jsonMiddleChapters'
         ));
 
         $bigChapters = $this->SmallChapters->MiddleChapters->BigChapters

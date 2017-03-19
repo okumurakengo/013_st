@@ -183,7 +183,7 @@ class StudiesController extends AppController
             ->order(['SmallChapters.display_order' => 'ASC']);
         foreach ($arrSmallChapters as $value) {
             $selectSmallChapters[$value['middle_chapter']['display_order'] . '. ' . $value['middle_chapter']['title']][$value['id']] = $value['display_order'] . ". " . $value['title'];
-            $jsonSmallChapters[] = strval($value['id']);
+            $jsonSmallChapters[] = $value['id'];
         }
         $jsonSmallChapters = json_encode($jsonSmallChapters, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         $searchSmallChapters = TableRegistry::get('SmallChapters')

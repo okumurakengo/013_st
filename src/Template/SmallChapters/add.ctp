@@ -14,14 +14,16 @@
     </ul>
 </nav>
 <div class="smallChapters form large-9 medium-8 columns content">
-    <?= $this->Form->create('',['id' => 'search']) ?>
+    <?= $this->Form->create('',['id' => 'search','class'=>'pull_change']) ?>
     <fieldset>
         <legend><?= __('検索') ?></legend>
         <div class="row">
             <div class="medium-2 columns">技術書名</div>
             <div class="medium-10 columns"><?= $this->Form->select('books', $selectBooks, [$searchBooks, 'id'=>'books']) ?></div>
             <div class="medium-2 columns">中分類</div>
-            <div class="medium-10 columns"><?= $this->Form->select('middle_chapter_id',$selectMiddleChapters, ['default' => [$searchMiddleChapters], 'id'=>'middle_chapters']) ?></div>
+            <div class="medium-10 columns">
+                <?= $this->Form->select('middle_chapter_id',$selectMiddleChapters, ['default' => [$searchMiddleChapters],'id'=>'middle_chapters','class'=>'pull_keydown']) ?>
+            </div>
         </div>
         <?=$this->Form->hidden('search' ,['value'=> 'search' ]) ?>
     </fieldset>
@@ -58,4 +60,7 @@
 
     }
 
+</script>
+<script id="json_data" type="application/json">
+    <?= $jsonMiddleChapters ?>
 </script>

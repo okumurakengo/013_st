@@ -28,7 +28,8 @@
                 ステータス<?= $this->Form->select('status_id', $statuses, ['id'=>'status','default' => 5]); ?>
             </div>
             <div class="medium-8 columns end">
-                小分類<?= $this->Form->select('small_chapter_id',$selectSmallChapters, ['id'=>'small_chapters', 'default'=>$searchSmallChapters]) ?>
+                小分類
+                <?= $this->Form->select('small_chapter_id',$selectSmallChapters, ['default'=>$searchSmallChapters,'id'=>'small_chapters','class'=>'pull_keydown']) ?>
             </div>
         </div>
         内容<?= $this->Form->textarea('content', ['id'=>'focus','rows' => '10']); ?>
