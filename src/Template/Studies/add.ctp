@@ -17,7 +17,7 @@
         <?=$this->Form->hidden('search' ,['value'=> 'search' ]) ?>
     </fieldset>
     <?= $this->Form->end() ?>
-    <?= $this->Form->create($study) ?>
+    <?= $this->Form->create($study,['id'=>'add_form']) ?>
     <fieldset>
         <legend><?= __('Add Study') ?></legend>
         <div class="row">
@@ -25,7 +25,7 @@
                 <?= $this->Form->input('user_id', ['options' => $users]); ?>
             </div>
             <div class="medium-2 columns">
-                ステータス<?= $this->Form->select('status_id', $statuses, ['default' => 5]); ?>
+                ステータス<?= $this->Form->select('status_id', $statuses, ['id'=>'status','default' => 5]); ?>
             </div>
             <div class="medium-8 columns end">
                 小分類<?= $this->Form->select('small_chapter_id',$selectSmallChapters, ['id'=>'small_chapters', 'default'=>$searchSmallChapters]) ?>
@@ -62,4 +62,7 @@
 
     }
 
+</script>
+<script id="json_data" type="application/json">
+    <?= $jsonSmallChapters ?>
 </script>
