@@ -18,7 +18,6 @@ $(function() {
         if(e.ctrlKey){
             switch (e.keyCode) {
                 case s_keyCode:
-                    $('button[type=submit]').focus();
                     $('#add_form').submit();
                     break;
                 case t_keyCode:
