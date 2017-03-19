@@ -33,14 +33,16 @@ $(function() {
         // プルダウン選択ショートカット
         var pull_keydown = $('.pull_keydown').val();
         var select_number = $.inArray(parseInt(pull_keydown), json_data);
-        if (e.keyCode === down_keyCode) {
-            $('.pull_keydown').val(json_data[select_number + 1]);
-            $('.pull_change').submit();
-            return false;
-        } else if (e.keyCode === up_keyCode) {
-            $('.pull_keydown').val(json_data[select_number - 1]);
-            $('.pull_change').submit();
-            return false;
+        if(e.shiftKey) {
+            if (e.keyCode === down_keyCode) {
+                $('.pull_keydown').val(json_data[select_number + 1]);
+                $('.pull_change').submit();
+                return false;
+            } else if (e.keyCode === up_keyCode) {
+                $('.pull_keydown').val(json_data[select_number - 1]);
+                $('.pull_change').submit();
+                return false;
+            }
         }
     });
 
