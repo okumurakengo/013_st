@@ -57,3 +57,13 @@ code {
 .add_button {
     float: right;
 }
+
+.books_done{
+    background: #aaa !important;
+}
+.books_hold{
+    background: #AED5AC !important;
+}
+.books_new{
+    background: #FFFF6A;
+}

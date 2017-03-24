@@ -1,11 +1,8 @@
 <?php foreach ($books as $book): ?>
-    <tr class="item_box" data-rank="<?= $book->display_order ?>" data-book-id="<?= $book->id ?>">
-        <td>
-            <?php if($book->url !== ''): ?>
-                <a href="<?= h($book->url) ?>" target="_blank"><?= h($book->title) ?></a>
-            <?php else: ?>
-                <?= h($book->title) ?>
-            <?php endif; ?>
+    <tr class="item_box<?= $this->Class->books_tr_class($book->status->id) ?>" data-rank="<?= $book->display_order ?>" data-book-id="<?= $book->id ?>">
+        <td><?= $this->Books->book_or_site($book->url,$book->title) ?></td>
+        <td class="<?= $this->Class->books_td_class($book->status->id) ?>">
+            <?= h($book->status->title) ?>
         </td>
         <td><?= h($book->laps > 1 ? $book->laps : '') ?></td>
         <td><?= h($book->created->format('Y年m月d日H:i')) ?></td>

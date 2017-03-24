@@ -10,7 +10,8 @@
     <h3><?= __('Books') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <colgroup>
-            <col width="60">
+            <col width="53">
+            <col width="7">
             <col width="7">
             <col width="17">
             <col width="16">
@@ -18,6 +19,7 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('title') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('status_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('laps') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>

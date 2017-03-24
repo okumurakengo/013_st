@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Books Controller
@@ -76,12 +77,13 @@ class BooksController extends AppController
         }
 
         // 表示順番のプルダウン
-        $query = $this->Books
+        $queryBooks = $this->Books;
+        $arr_display_order = $queryBooks
             ->find()
             ->select(['title','display_order'])
             ->order(['display_order' => 'ASC']);
         $select_display_order[1] = "最初に表示する";
-        foreach ($query as $value) {
+        foreach ($arr_display_order as $value) {
             $select_display_order[$value['display_order']+1]='「'.$value['display_order'].'. '.$value['title'].'」の次に表示する';
         }
         $this->set(compact('select_display_order'));
@@ -118,17 +120,29 @@ class BooksController extends AppController
             $this->Flash->error(__('The book could not be saved. Please, try again.'));
         }
 
+        $queryBooks = $this->Books;
         // 表示順番のプルダウン
-        $query = $this->Books
+        $arr_display_order = $queryBooks
             ->find()
             ->select(['id','title','display_order'])
             ->order(['display_order' => 'ASC']);
         $i = 1;
         $select_display_order[$i] = "最初に表示する";
-        foreach ($query as $value) {
+        foreach ($arr_display_order as $value) {
             $select_display_order[$i++] = '「' . $value['display_order'] . '. ' . $value['title'] . '」の次に表示する';
         }
-        $this->set(compact('select_display_order'));
+        $Statuses = TableRegistry::get('Statuses');
+        $arr_status = $Statuses
+            ->find()
+            ->select(['id','title'])
+            ->order(['display_order' => 'ASC']);
+        foreach ($arr_status as $value) {
+            $select_status[$value->id] = $value->title;
+        }
+        $this->set(compact(
+            'select_display_order',
+            'select_status'
+        ));
         $this->set(compact('book'));
         $this->set('_serialize', ['book']);
     }
@@ -175,6 +189,9 @@ class BooksController extends AppController
             'limit' => 300,
             'order' => [
                 'display_order' => 'asc'
+            ],
+            'contain' => [
+                'Statuses'
             ]
         ];
         $books = $this->paginate($this->Books);
@@ -210,4 +227,5 @@ class BooksController extends AppController
         }
 
     }
+
 }

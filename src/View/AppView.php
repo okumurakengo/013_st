@@ -36,5 +36,8 @@ class AppView extends View
      */
     public function initialize()
     {
+        parent::initialize();
+        $this->loadHelper('Class');
+        $this->loadHelper('Books');
     }
 }

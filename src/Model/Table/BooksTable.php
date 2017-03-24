@@ -43,6 +43,10 @@ class BooksTable extends Table
         $this->hasMany('BigChapters', [
             'foreignKey' => 'book_id'
         ]);
+        $this->belongsTo('Statuses', [
+            'foreignKey' => 'status_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
