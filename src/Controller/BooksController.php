@@ -172,6 +172,7 @@ class BooksController extends AppController
 
         // books一覧表示
         $this->paginate = [
+            'limit' => 300,
             'order' => [
                 'display_order' => 'asc'
             ]
