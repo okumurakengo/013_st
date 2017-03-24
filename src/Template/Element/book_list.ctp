@@ -7,8 +7,8 @@
                 <?= h($book->title) ?>
             <?php endif; ?>
         </td>
+        <td><?= h($book->laps > 1 ? $book->laps : '') ?></td>
         <td><?= h($book->created->format('Y年m月d日H:i')) ?></td>
-        <td><?= h($book->modified->format('Y年m月d日H:i')) ?></td>
         <td class="actions">
             <?= $this->Html->link(__('View'), ['action' => 'view', $book->id]) ?>
             <?= $this->Html->link(__('Edit'), ['action' => 'edit', $book->id]) ?>

@@ -24,6 +24,7 @@
         <?php
             echo $this->Form->input('title');
             echo $this->Form->select('display_order',$select_display_order);
+            echo $this->Form->number('laps');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

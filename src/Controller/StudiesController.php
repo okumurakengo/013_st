@@ -124,20 +124,22 @@ class StudiesController extends AppController
         $study_cnt = $this->Studies
             ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
             ->where("Books.id = $searchBooks")
+            ->where('Studies.laps = '.$this->_getLaps($searchBooks))
             ->count();
+        $searchBigChapters = $BigChapters
+            ->find('all',['contain'=>['Books']])
+            ->where("books.id = $searchBooks")
+            ->order(['books.laps' => 'DESC'])
+            ->order(['BigChapters.display_order'=>'ASC'])
+            ->first()->id;
         if ($bChapter_cnt !== 0 && $study_cnt !== 0) {
             $searchBigChapters = $this->Studies
                 ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
                 ->select(['BigChapters.id'])
                 ->where("books.id = $searchBooks")
-                ->order(['Studies.modified' => 'DESC'])
+                ->where("Studies.laps = ".$this->_getLaps($searchBooks))
+                ->order(['Studies.created' => 'DESC'])
                 ->first()->BigChapters->id;
-        } else {
-            $searchBigChapters = $BigChapters
-                ->find('all',['contain'=>['Books']])
-                ->where("books.id = $searchBooks")
-                ->order(['BigChapters.display_order'=>'ASC'])
-                ->first()->id;
         }
         if (isset($this->request->data['big_chapters_flg']) && $this->request->data['big_chapters_flg'] === '1') {
             $searchBigChapters = $this->request->data['big_chapters'];
@@ -146,6 +148,7 @@ class StudiesController extends AppController
         // 登録処理
         $study = $this->Studies->newEntity();
         if ($this->request->is('post') && empty($this->request->data['search'])) {
+            $this->request->data['laps'] = $this->_getLaps($searchBooks);
             $study = $this->Studies->patchEntity($study, $this->request->data);
             if ($this->Studies->save($study)) {
                 $this->Flash->success(__('The study has been saved.'));
@@ -193,16 +196,17 @@ class StudiesController extends AppController
             ->order(['MiddleChapters.display_order' => 'ASC'])
             ->order(['SmallChapters.display_order' => 'ASC'])
             ->first()->id;
-        $sChapter_cnt = TableRegistry::get('SmallChapters')
-            ->find('all', ['contain'=>['MiddleChapters'=>['BigChapters'=>['Books']]]])
+        $sChapter_cnt = $this->Studies
+            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
             ->where("Books.id = {$searchBooks}")
+            ->where('Studies.laps = '.$this->_getLaps($searchBooks))
             ->count();
         if ($sChapter_cnt !== 0 && $study_cnt !== 0) {
             $searchSmallChapters = $this->Studies
                 ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
                 ->select(['SmallChapters.id'])
                 ->where("books.id = {$searchBooks}")
-                ->order(['Studies.modified' => 'DESC'])
+                ->order(['Studies.created' => 'DESC'])
                 ->first()->SmallChapters->id;
         }
         $this->set(compact(
@@ -254,6 +258,15 @@ class StudiesController extends AppController
         $statuses = $this->Studies->Statuses->find('list', ['limit' => 200]);
         $this->set(compact('study', 'users', 'smallChapters', 'statuses'));
         $this->set('_serialize', ['study']);
+    }
+
+    private function _getLaps($searchBooks) {
+        return TableRegistry::get('Books')
+            ->find()
+            ->select(['Laps'])
+            ->where(["Books.id = {$searchBooks}"])
+            ->first()
+            ->Laps;
     }
 
     /**

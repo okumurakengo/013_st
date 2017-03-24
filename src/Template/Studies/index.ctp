@@ -18,11 +18,13 @@
     </p>
     <h3><?= __('Studies') ?></h3>
     <table cellpadding="0" cellspacing="0">
-        <col width="5">
-        <col width="50">
-        <col width="15">
-        <col width="15">
-        <col width="15">
+        <colgroup>
+            <col width="5">
+            <col width="60">
+            <col width="15">
+            <col width="5">
+            <col width="15">
+        </colgroup>
         <thead>
             <tr>
                 <th scope="col"></th>
@@ -71,7 +73,7 @@
                     <?= $study->has('status') ? $this->Html->link($study->status->title, ['controller' => 'Statuses', 'action' => 'view', $study->status->id]) : '' ?>
                 </td>
                 <td><?= h($study->created->format('Y年m月d日H:i')) ?></td>
-                <td><?= h($study->modified->format('Y年m月d日H:i')) ?></td>
+                <td><?= h($study->laps > 1 ? $study->laps.'週目' : '') ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $study->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $study->id]) ?>
