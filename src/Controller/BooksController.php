@@ -20,6 +20,7 @@ class BooksController extends AppController
     public function index()
     {
         $this->_book_list();
+
         $this->set('_serialize', ['books']);
     }
 
@@ -184,17 +185,42 @@ class BooksController extends AppController
 
     public function _book_list() {
 
+        $subquery = TableRegistry::get('Studies')
+            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]]);
+        $subquery
+            ->select(['Books.id','count' => $subquery->func()->count('*')])
+            ->group('Books.id');
+
         // books一覧表示
-        $this->paginate = [
-            'limit' => 300,
-            'order' => [
-                'display_order' => 'asc'
-            ],
-            'contain' => [
-                'Statuses'
-            ]
-        ];
-        $books = $this->paginate($this->Books);
+        $limit = '100';
+        $books = $this->Books
+            ->find('all',[
+                'limit' => $limit,
+                'join' => [
+                    'StudiesCount' => [
+                        'table' => $subquery,
+                        'type' => 'LEFT',
+                        'conditions' => 'books.id = StudiesCount.Books__id'
+                    ]
+                ],
+                'contain' => ['Statuses'],
+            ])
+            ->select([
+                'Books.id',
+                'Books.title',
+                'Books.url',
+                'Books.display_order',
+                'Books.status_id',
+                'Books.laps',
+                'Books.created',
+                'Statuses.id',
+                'Statuses.title',
+                'StudiesCount.count'
+            ])
+            ->order(['books.display_order' => 'ASC']);
+
+        $this->paginate = ['limit' => $limit];
+        $this->paginate($this->Books);
 
         $this->set(compact('books'));
 

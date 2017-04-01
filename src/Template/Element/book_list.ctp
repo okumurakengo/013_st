@@ -5,6 +5,7 @@
             <?= h($book->status->title) ?>
         </td>
         <td><?= h($book->laps > 1 ? $book->laps : '') ?></td>
+        <td><?= h($book->StudiesCount['count'] ? $book->StudiesCount['count'] : '0') ?></td>
         <td><?= h($book->created->format('Y年m月d日H:i')) ?></td>
         <td class="actions">
             <?= $this->Html->link(__('View'), ['action' => 'view', $book->id]) ?>
