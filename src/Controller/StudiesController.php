@@ -189,26 +189,9 @@ class StudiesController extends AppController
             $jsonSmallChapters[] = $value['id'];
         }
         $jsonSmallChapters = json_encode($jsonSmallChapters, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-        $searchSmallChapters = TableRegistry::get('SmallChapters')
-            ->find('all', ['contain'=>['MiddleChapters'=>['BigChapters'=>['Books']]]])
-            ->select(['id'])
-            ->where("Books.id = {$searchBooks}")
-            ->order(['MiddleChapters.display_order' => 'ASC'])
-            ->order(['SmallChapters.display_order' => 'ASC'])
-            ->first()->id;
-        $sChapter_cnt = $this->Studies
-            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
-            ->where("Books.id = {$searchBooks}")
-            ->where('Studies.laps = '.$this->_getLaps($searchBooks))
-            ->count();
-        if ($sChapter_cnt !== 0 && $study_cnt !== 0) {
-            $searchSmallChapters = $this->Studies
-                ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
-                ->select(['SmallChapters.id'])
-                ->where("books.id = {$searchBooks}")
-                ->order(['Studies.created' => 'DESC'])
-                ->first()->SmallChapters->id;
-        }
+
+        $searchSmallChapters = $this->_getSmallChapters($searchBooks,$study_cnt);
+
         $this->set(compact(
             'selectBooks',
             'searchBooks',
@@ -230,6 +213,31 @@ class StudiesController extends AppController
         }
         $this->set(compact('study', 'users', 'smallChapters', 'statuses'));
         $this->set('_serialize', ['study']);
+    }
+
+    private function _getSmallChapters($searchBooks,$study_cnt)
+    {
+        $sChapter_cnt = $this->Studies
+            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
+            ->where("Books.id = {$searchBooks}")
+            ->where('Studies.laps = '.$this->_getLaps($searchBooks))
+            ->count();
+        if ($sChapter_cnt !== 0 && $study_cnt !== 0) {
+            return $this->Studies
+                ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
+                ->select(['SmallChapters.id'])
+                ->where("books.id = {$searchBooks}")
+                ->order(['Studies.created' => 'DESC'])
+                ->first()->SmallChapters->id;
+        }
+        return $searchSmallChapters = TableRegistry::get('SmallChapters')
+            ->find('all', ['contain'=>['MiddleChapters'=>['BigChapters'=>['Books']]]])
+            ->select(['id'])
+            ->where("Books.id = {$searchBooks}")
+            ->order(['BigChapters.display_order' => 'ASC'])
+            ->order(['MiddleChapters.display_order' => 'ASC'])
+            ->order(['SmallChapters.display_order' => 'ASC'])
+            ->first()->id;
     }
 
     /**
