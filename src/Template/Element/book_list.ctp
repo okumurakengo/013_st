@@ -5,7 +5,8 @@
             <?= h($book->status->title) ?>
         </td>
         <td><?= h($book->laps > 1 ? $book->laps : '') ?></td>
-        <td><?= h($book->StudiesCount['count'] ? $book->StudiesCount['count'] : '0') ?></td>
+        <td class="text-right"><?= h($this->Books->book_count($book->StudiesCount['count']))?> / <?=h($this->Books->book_count($book->SmallCount['count']))?></td>
+        <td class="text-right"><?= h($this->Books->percent($book->StudiesCount['count'],$book->SmallCount['count']))?>%</td>
         <td><?= h($book->created->format('Y年m月d日H:i')) ?></td>
         <td class="actions">
             <?= $this->Html->link(__('View'), ['action' => 'view', $book->id]) ?>

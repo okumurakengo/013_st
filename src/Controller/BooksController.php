@@ -185,10 +185,16 @@ class BooksController extends AppController
 
     public function _book_list() {
 
-        $subquery = TableRegistry::get('Studies')
+        $st_count_subquery = TableRegistry::get('Studies')
             ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]]);
-        $subquery
-            ->select(['Books.id','count' => $subquery->func()->count('*')])
+        $st_count_subquery
+            ->select(['Books.id','count' => $st_count_subquery->func()->count('*')])
+            ->group('Books.id');
+
+        $sm_count_subquery = TableRegistry::get('SmallChapters')
+            ->find('all', ['contain' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]);
+        $sm_count_subquery
+            ->select(['Books.id','count' => $sm_count_subquery->func()->count('*')])
             ->group('Books.id');
 
         // books一覧表示
@@ -198,10 +204,15 @@ class BooksController extends AppController
                 'limit' => $limit,
                 'join' => [
                     'StudiesCount' => [
-                        'table' => $subquery,
+                        'table' => $st_count_subquery,
                         'type' => 'LEFT',
                         'conditions' => 'books.id = StudiesCount.Books__id'
-                    ]
+                    ],
+                    'SmallCount' => [
+                        'table' => $sm_count_subquery,
+                        'type' => 'LEFT',
+                        'conditions' => 'books.id = SmallCount.Books__id'
+                    ],
                 ],
                 'contain' => ['Statuses'],
             ])
@@ -215,7 +226,8 @@ class BooksController extends AppController
                 'Books.created',
                 'Statuses.id',
                 'Statuses.title',
-                'StudiesCount.count'
+                'StudiesCount.count',
+                'SmallCount.count'
             ])
             ->order(['books.display_order' => 'ASC']);
 
