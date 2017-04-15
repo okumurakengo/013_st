@@ -2,6 +2,7 @@
 /**
   * @var \App\View\AppView $this
   */
+$parser = new \cebe\markdown\MarkdownExtra();
 ?>
 <div class="studies index content">
     <?= $this->Form->create('',['id' => 'search']) ?>
@@ -65,7 +66,7 @@
             </tr>
             <tr class="<?= $tr_class ?>">
                 <td class="study_content" colspan="4">
-                    <pre><?= \Michelf\Markdown::defaultTransform($study->content)?></pre>
+                    <pre><?= $parser->parse($study->content)?></pre>
                 </td>
             </tr>
             <tr class="<?= $tr_class ?>">
