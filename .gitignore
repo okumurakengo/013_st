@@ -3,6 +3,10 @@
 /vendor/*
 /config/app.php
 
+/json/*
+/composer.json
+/composer.lock
+
 /.idea/*
 /php-markdown/*
 /tmp/debug_kit.sqlite
