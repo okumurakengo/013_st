@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Books Controller
@@ -53,19 +54,7 @@ class BooksController extends AppController
 
             // 表示順変更処理
             $display_order = $this->request->data['display_order'];
-            $Books_data = $this->Books
-                ->find()
-                ->select(['id','display_order'])
-                ->where("display_order >= $display_order")
-                ->order(['display_order' => 'DESC']);
-            foreach ($Books_data as $value) {
-                $update_date = $this->Books
-                    ->find('all')
-                    ->where(['id' => $value['id']])
-                    ->first();
-                $update_date->display_order = $value->display_order + 1;
-                $this->Books->save($update_date);
-            }
+            $this->_displayorderNew($display_order);
 
             $this->request->data["select_flg"] = 1;
             $book = $this->Books->patchEntity($book, $this->request->data);
@@ -168,6 +157,132 @@ class BooksController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    /**
+     * json読み込みページ
+     */
+    public function json(){
+        $book = $this->Books->newEntity();
+
+        $error = '';
+        if ($this->request->is('post')) {
+            // json読み込み処理
+            $fileName = $this->request->data['json']['tmp_name'];
+            $json = file_get_contents($fileName);
+            $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+            $json = json_decode($json,true);
+            if(!$json) $error = 'アップロード失敗';
+
+            $Big_Chapters = TableRegistry::get('Big_Chapters');
+            $Middle_Chapters = TableRegistry::get('Middle_Chapters');
+            $Small_Chapters = TableRegistry::get('Small_Chapters');
+
+            $big_chapter_query = $Big_Chapters->query();
+            $middle_chapter_query = $Middle_Chapters->query();
+            $small_chapter_query = $Small_Chapters->query();
+
+            // トランザクション開始
+            $this->Books->connection()->begin();
+            $Big_Chapters->connection()->begin();
+            $Middle_Chapters->connection()->begin();
+            $Small_Chapters->connection()->begin();
+
+            foreach ($json as $key1 => $value1){
+                //技術書登録処理
+                $data_books = [
+                    'title' => $key1,
+                    'url' => '',
+                    'display_order' => '1',
+                    'status_id' => '2',
+                    'laps' => '1',
+                    'select_flg' => '1'
+                ];
+                $book = $this->Books->patchEntity($book, $data_books);
+                $this->_displayorderNew( 1 );
+                if(!$this->Books->save($book)){
+                    $this->_rollback($book);
+                    break;
+                }
+
+                //大分類登録処理
+                $target_books = $this->Books->find()
+                    ->order(['id'=>'DESC'])
+                    ->first()->id;
+                $big_chapter_cnt = 1;
+                foreach ($value1 as $key2 => $value2){
+                    $res = $big_chapter_query->insert(['book_id', 'title', 'display_order', 'select_flg', 'created', 'modified'])
+                        ->values([
+                            'book_id'=>$target_books,
+                            'title'=>$key2,
+                            'display_order'=>$big_chapter_cnt,
+                            'select_flg'=>'1',
+                            'created'=>Time::now(),
+                            'modified'=>Time::now()
+                        ])
+                        ->execute();
+                    $big_chapter_query->parts_values_reset();
+
+                    //中分類登録処理
+                    $target_big_chapters = $Big_Chapters->find()
+                        ->order(['id'=>'DESC'])
+                        ->first()->id;
+                    $middle_chapter_cnt = 1;
+                    foreach ($value2 as $key3 => $value3){
+                        $res = $middle_chapter_query->insert(['big_chapter_id', 'title', 'display_order', 'select_flg', 'created', 'modified'])
+                            ->values([
+                                'big_chapter_id'=>$target_big_chapters,
+                                'title'=>$key3,
+                                'display_order'=>$middle_chapter_cnt,
+                                'select_flg'=>'1',
+                                'created'=>Time::now(),
+                                'modified'=>Time::now()
+                            ])
+                            ->execute();
+                        $middle_chapter_query->parts_values_reset();
+
+                        //小分類登録処理
+                        $target_middle_chapters = $Middle_Chapters->find()
+                            ->order(['id'=>'DESC'])
+                            ->first()->id;
+                        $small_chapter_cnt = 1;
+                        foreach ($value3 as $value4){
+                            $res = $small_chapter_query->insert(['middle_chapter_id', 'title', 'display_order', 'select_flg', 'created', 'modified'])
+                                ->values([
+                                    'middle_chapter_id'=>$target_middle_chapters,
+                                    'title'=>$value4,
+                                    'display_order'=>$small_chapter_cnt,
+                                    'select_flg'=>'1',
+                                    'created'=>Time::now(),
+                                    'modified'=>Time::now()
+                                ])
+                                ->execute();
+                            $small_chapter_query->parts_values_reset();
+
+                            $small_chapter_cnt++;
+                        }
+
+                        $middle_chapter_cnt++;
+                    }
+
+                    $big_chapter_cnt++;
+                }
+
+                // コミット
+                $this->Books->connection()->commit();
+                $Big_Chapters->connection()->commit();
+                $Middle_Chapters->connection()->commit();
+                $Small_Chapters->connection()->commit();
+                $this->Flash->success('The user has been saved.');
+            }
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->set(compact(
+            'book',
+            'error'
+        ));
+    }
+
     // 表示順番変更
     public function ajax()
     {
@@ -238,6 +353,30 @@ class BooksController extends AppController
 
     }
 
+    /**
+     * 新しい本を挿入した際の他の本の表示順番を変更する
+     * @param $display_order 新しい順番
+     */
+    public function _displayorderNew($display_order) {
+        $Books_data = $this->Books
+            ->find()
+            ->select(['id','display_order'])
+            ->where("display_order >= $display_order")
+            ->order(['display_order' => 'DESC']);
+        foreach ($Books_data as $value) {
+            $update_date = $this->Books
+                ->find('all')
+                ->where(['id' => $value['id']])
+                ->first();
+            $update_date->display_order = $value->display_order + 1;
+            $this->Books->save($update_date);
+        }
+    }
+
+    /**
+     * @param $src_display_order 古い順番
+     * @param $display_order 新しい順番
+     */
     public function _displayorderEdit($src_display_order,$display_order) {
 
         // 表示順変更処理
@@ -264,6 +403,16 @@ class BooksController extends AppController
             $this->Books->save($update_date);
         }
 
+    }
+
+    public function _rollback(){
+        // バリデーションエラー表示
+        $this->Flash->error('The user could not be saved. Please, try again.');
+        // ロールバック
+        $this->Books->connection()->rollback();
+        TableRegistry::get('Big_Chapters')->connection()->rollback();
+        TableRegistry::get('Middle_Chapters')->connection()->rollback();
+        TableRegistry::get('Small_Chapters')->connection()->rollback();
     }
 
 }
