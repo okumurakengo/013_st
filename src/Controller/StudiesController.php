@@ -3,7 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
-require_once ROOT . '/php-markdown/Michelf/Markdown.inc.php';
+use Cake\I18n\Time;
 
 /**
  * Studies Controller
@@ -22,13 +22,7 @@ class StudiesController extends AppController
     {
         // 検索フォーム
         // 技術書プルダウンの初期値
-        $Books = TableRegistry::get('Books');
-        $searchBooks = $Books
-            ->find()
-            ->select(['id'])
-            ->order(['display_order' => 'ASC'])
-            ->first()
-            ->id;
+        $searchBooks = $this->_getfirstBook();
         if ($this->request->is('post')) {
             $searchBooks = $this->request->data['books'];
         }
@@ -107,12 +101,7 @@ class StudiesController extends AppController
     public function add()
     {
         // 技術書検索フォーム
-        $Books = TableRegistry::get('Books');
-        $searchBooks = $Books
-            ->find()
-            ->select(['id'])
-            ->order(['display_order' => 'ASC'])
-            ->first()->id;
+        $searchBooks = $this->_getfirstBook();
         $BigChapters = TableRegistry::get('BigChapters');
         if ($this->request->is('post')) {
             $searchBooks = $this->request->data['books'];
@@ -268,15 +257,6 @@ class StudiesController extends AppController
         $this->set('_serialize', ['study']);
     }
 
-    private function _getLaps($searchBooks) {
-        return TableRegistry::get('Books')
-            ->find()
-            ->select(['Laps'])
-            ->where(["Books.id = {$searchBooks}"])
-            ->first()
-            ->Laps;
-    }
-
     /**
      * Delete method
      *
@@ -296,4 +276,96 @@ class StudiesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * グラフ表示
+     */
+    public function graph(){
+
+    }
+
+    public function drawgraph(){
+        $this->viewBuilder()->layout(false);
+        $start_date = new Time($this->request->data['start_date']);
+        $end_date = new Time($this->request->data['end_date']);
+        $date_diff = ($end_date->toUnixString() - $start_date->toUnixString()) / (24 * 60 * 60);
+
+        for ($i = 0; $i <= $date_diff; $i++){
+            $studies_subquery = $this->Studies
+                ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
+                ->where("Studies.created <= '{$start_date->format('Y-m-d')}'");
+            $studies_subquery
+                ->select(['Books.id', 'count' => $studies_subquery->func()->count('*')])
+                ->group('Books.id');
+
+            $sm_count_subquery = TableRegistry::get('SmallChapters')
+                ->find('all', ['contain' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]);
+            $sm_count_subquery
+                ->select(['Books.id','count' => $sm_count_subquery->func()->count('*')])
+                ->group('Books.id');
+
+            $studies = TableRegistry::get('Books')
+                ->find('all', [
+                    'join' => [
+                        'StudiesCount' => [
+                            'table' => $studies_subquery,
+                            'type' => 'LEFT',
+                            'conditions' => 'books.id = StudiesCount.Books__id'
+                        ],
+                        'SmallCount' => [
+                            'table' => $sm_count_subquery,
+                            'type' => 'LEFT',
+                            'conditions' => 'books.id = SmallCount.Books__id'
+                        ]
+                    ]
+                ])
+                ->select([
+                    'Books.id',
+                    'Books.title',
+                    'StudiesCount.count',
+                    'SmallCount.count',
+                ])
+                ->where('Books.status_id in (2)');
+
+            $cnt = 0;
+            foreach ($studies as $study) {
+                if($cnt < 30) {
+                    $count_data[$cnt]['title'] = $study->title;
+                    $count_data[$cnt]['date']['Y'] = $start_date->format('Y');
+                    $count_data[$cnt]['date']['m'] = $start_date->format('m');
+                    $count_data[$cnt]['date']['d'] = $start_date->format('d');
+                    $count_data[$cnt]['count'] = $study->StudiesCount['count'];
+                    $count_data[$cnt]['schapter_total'] = $study->SmallCount['count'];
+                }
+                $cnt++;
+            }
+            $data[] = $count_data;
+
+            $start_date->modify('+1 days');
+        }
+        $json_data = json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
+        $this->set(compact('json_data'));
+
+    }
+
+    private function _getfirstBook(){
+        $Books = TableRegistry::get('Books');
+        return $Books
+            ->find()
+            ->select(['id'])
+            ->order(['display_order' => 'ASC'])
+            ->first()
+            ->id;
+    }
+
+    private function _getLaps($searchBooks) {
+        return TableRegistry::get('Books')
+            ->find()
+            ->select(['Laps'])
+            ->where(["Books.id = {$searchBooks}"])
+            ->first()
+            ->Laps;
+    }
+
 }

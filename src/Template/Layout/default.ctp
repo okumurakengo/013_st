@@ -30,16 +30,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->Html->css('cake.css') ?>
     <?= $this->Html->css('style.css') ?>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <?= $this->Html->script('script.js') ?>
+    <?= file_exists('js/' . $script = strtolower($this->request->params['controller']) . '.js') ? $this->Html->script($script) : '' ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
-
 </head>
 <body>
     <nav class="top-bar expanded" data-topbar role="navigation">
@@ -55,6 +57,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
                 <li><?= $this->Html->link('中分類一覧', ['controller' => 'MiddleChapters', 'action' => 'index']) ?></li>
                 <li><?= $this->Html->link('小分類一覧', ['controller' => 'SmallChapters', 'action' => 'index']) ?></li>
                 <li><?= $this->Html->link('勉強結果一覧', ['controller' => 'Studies', 'action' => 'index']) ?></li>
+                <li><?= $this->Html->link('グラフ', ['controller' => 'Studies', 'action' => 'graph']) ?></li>
             </ul>
         </div>
     </nav>
