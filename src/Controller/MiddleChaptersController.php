@@ -128,7 +128,8 @@ class MiddleChaptersController extends AppController
             ->find()
             ->select(['id', 'display_order', 'title'])
             ->innerJoinWith('Books')
-            ->where("books.id = $searchBooks");
+            ->where("books.id = $searchBooks")
+            ->order(["BigChapters.display_order" => 'ASC']);
         foreach ($arrBigChapters as $value) {
             $selectBigChapters[$value['id']] = $value['display_order'] . ". " . $value['title'];
         }
