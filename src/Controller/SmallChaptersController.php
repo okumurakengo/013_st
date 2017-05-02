@@ -20,27 +20,15 @@ class SmallChaptersController extends AppController
     public function index()
     {
         $this->paginate = [
-            'limit' => 300,
-            'maxLimit' => 300,
-            'sortWhitelist' => [
-                'Books.display_order',
-                'BigChapters.display_order',
-                'MiddleChapters.display_order',
-                'display_order'
-            ],
-            'order' => [
-                'Books.display_order' => 'asc',
-                'BigChapters.display_order' => 'asc',
-                'MiddleChapters.display_order' => 'asc',
-                'display_order' => 'asc'
-            ],
             'contain' => [
                 'MiddleChapters' => [
                     'BigChapters' => [
                         'Books'
                     ]
                 ]
-            ]
+            ],
+            'limit' => 300,
+            'maxLimit' => 300,
         ];
 
         // 最初のBookIDを取得
@@ -60,6 +48,10 @@ class SmallChaptersController extends AppController
             $this->SmallChapters
                 ->find()
                 ->where(["books.id = {$BookId}"])
+                ->order(['BigChapters.display_order' => 'asc',
+                    'MiddleChapters.display_order' => 'asc',
+                    'SmallChapters.display_order' => 'asc'
+                ])
         );
 
         // 検索フォーム
