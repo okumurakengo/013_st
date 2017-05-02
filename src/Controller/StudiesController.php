@@ -286,11 +286,36 @@ class StudiesController extends AppController
 
     public function drawgraph(){
         $this->viewBuilder()->layout(false);
+
         $start_date = new Time($this->request->data['start_date']);
         $end_date = new Time($this->request->data['end_date']);
         $date_diff = ($end_date->toUnixString() - $start_date->toUnixString()) / (24 * 60 * 60);
+        $cat = $this->request->data['cat'];
+        $past = $this->request->data['past'];
 
-        for ($i = 0; $i <= $date_diff; $i++){
+        $start_date_add = new Time($this->request->data['start_date']);
+        $start_date_add->modify('+1 days');
+
+        $compare_start_date = [];
+        $compare_start_date_add = [];
+        $day_timestamp =24 * 60 * 60;
+        for($i=0;$i<$past;$i++) {
+            $compare_start_date[] = Time::createFromTimestamp($start_date->toUnixString() - (($date_diff * ($i+1)) * $day_timestamp)- $day_timestamp * ($i+1));
+            $compare_start_date_add[] = Time::createFromTimestamp($start_date_add->toUnixString() - ((($date_diff * ($i+1))) * $day_timestamp) - $day_timestamp * ($i+1));
+        }
+
+        if($cat === 'studies') {
+            $json_data = $this->_drawgraph_studies($start_date,$date_diff);
+        }else if ($cat === 'day'){
+            $json_data = $this->_drawgraph_day($start_date,$start_date_add,$date_diff,$compare_start_date,$compare_start_date_add);
+        }
+
+        $this->set(compact('json_data'));
+    }
+
+    private function _drawgraph_studies($start_date,$date_diff){
+        $start_date->modify('+1 days');
+        for ($i = 0; $i <= $date_diff; $i++) {
             $studies_subquery = $this->Studies
                 ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
                 ->where("Studies.created <= '{$start_date->format('Y-m-d')}'");
@@ -301,7 +326,7 @@ class StudiesController extends AppController
             $sm_count_subquery = TableRegistry::get('SmallChapters')
                 ->find('all', ['contain' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]);
             $sm_count_subquery
-                ->select(['Books.id','count' => $sm_count_subquery->func()->count('*')])
+                ->select(['Books.id', 'count' => $sm_count_subquery->func()->count('*')])
                 ->group('Books.id');
 
             $studies = TableRegistry::get('Books')
@@ -329,24 +354,82 @@ class StudiesController extends AppController
 
             $cnt = 0;
             foreach ($studies as $study) {
-                if($cnt < 30) {
-                    $count_data[$cnt]['title'] = $study->title;
-                    $count_data[$cnt]['date']['Y'] = $start_date->format('Y');
-                    $count_data[$cnt]['date']['m'] = $start_date->format('m');
-                    $count_data[$cnt]['date']['d'] = $start_date->format('d');
-                    $count_data[$cnt]['count'] = $study->StudiesCount['count'];
-                    $count_data[$cnt]['schapter_total'] = $study->SmallCount['count'];
-                }
+                $count_data[$cnt]['title'] = $study->title;
+                $count_data[$cnt]['date']['Y'] = $start_date->format('Y');
+                $count_data[$cnt]['date']['m'] = $start_date->format('m');
+                $count_data[$cnt]['date']['d'] = $start_date->format('d');
+                $count_data[$cnt]['count'] = $study->StudiesCount['count'];
+                $count_data[$cnt]['schapter_total'] = $study->SmallCount['count'];
                 $cnt++;
             }
             $data[] = $count_data;
 
             $start_date->modify('+1 days');
         }
-        $json_data = json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        return $this->_json($data);
+    }
 
-        $this->set(compact('json_data'));
+    private function _drawgraph_day($start_date,$start_date_add,$date_diff,$compare_start_date,$compare_start_date_add){
+        $tmp_start_date = $start_date->format('n/j');
+        for($i=0;$i<count($compare_start_date);$i++) {
+            $tmp_compare_start_date[$i] = $compare_start_date[$i]->format('n/j');
+        }
+        for($i=0;$i<count($compare_start_date)+1;$i++) {
+            $cnt[] = 0;
+        }
+        for ($i = 0; $i <= $date_diff; $i++) {
+            $query = $this->Studies
+                ->find()
+                ->where([
+                    'Studies.created BETWEEN :start AND :end'
+                ])
+                ->bind(':start', $start_date->format('Y-m-d'), 'date')
+                ->bind(':end', $start_date_add->format('Y-m-d'), 'date');
+            $query
+                ->select(['count' => $query->func()->count('*')]);
 
+            foreach ($query as $val) {
+                $day_data[] = [$start_date->format('Y-m-d'),$val->count];
+            }
+
+            if($i<$date_diff) {
+                $start_date->modify('+1 days');
+                $start_date_add->modify('+1 days');
+            }
+
+            for ($j=0;$j<count($compare_start_date);$j++){
+                $compare_query = $this->Studies
+                    ->find()
+                    ->where([
+                        'Studies.created BETWEEN :start AND :end'
+                    ])
+                    ->bind(':start', $compare_start_date[$j]->format('Y-m-d'), 'date')
+                    ->bind(':end', $compare_start_date_add[$j]->format('Y-m-d'), 'date');
+                $compare_query
+                    ->select(['count' => $compare_query->func()->count('*')]);
+
+                foreach ($compare_query as $compare_val) {
+                    array_splice($day_data[$cnt[$j]],1,0,$compare_val->count);
+                    $cnt[$j]++;
+                }
+
+                if($i<$date_diff) {
+                    $compare_start_date[$j]->modify('+1 days');
+                    $compare_start_date_add[$j]->modify('+1 days');
+                }
+            }
+        }
+
+        array_unshift($day_data,['日時',$tmp_start_date.'〜'.$start_date->format('n/j')]);
+        for($i=0;$i<count($compare_start_date);$i++) {
+            array_splice($day_data[0],1,0,$tmp_compare_start_date[$i].'〜'.$compare_start_date[$i]->format('n/j'));
+        }
+
+        return $this->_json($day_data);
+    }
+
+    private function _json($data){
+        return json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     }
 
     private function _getfirstBook(){

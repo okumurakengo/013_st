@@ -13,8 +13,15 @@ use Cake\View\Helper;
 
 class StudiesHelper Extends Helper
 {
-    public function start_date(){
-        $start_date = Time::createFromTimestamp($_SERVER['REQUEST_TIME'] - (90 * 24 * 60 * 60));
+    public function start_date($cat){
+        switch ($cat){
+            case 'studies':
+                $start_date = Time::createFromTimestamp($_SERVER['REQUEST_TIME'] - (90 * 24 * 60 * 60));
+                break;
+            case 'day':
+                $start_date = Time::createFromTimestamp($_SERVER['REQUEST_TIME'] - (6 * 24 * 60 * 60));
+                break;
+        }
         return $start_date->i18nFormat('yyyy/MM/dd');
     }
 
