@@ -52,11 +52,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><?= $this->Html->link('技術書一覧', ['controller' => 'Books', 'action' => 'index']) ?></li>
-                <li><?= $this->Html->link('大分類一覧', ['controller' => 'BigChapters', 'action' => 'index']) ?></li>
-                <li><?= $this->Html->link('中分類一覧', ['controller' => 'MiddleChapters', 'action' => 'index']) ?></li>
-                <li><?= $this->Html->link('小分類一覧', ['controller' => 'SmallChapters', 'action' => 'index']) ?></li>
-                <li><?= $this->Html->link('勉強結果一覧', ['controller' => 'Studies', 'action' => 'index']) ?></li>
+                <ul>
+                    <li><?= $this->Html->link('技術書一覧', ['controller' => 'Books', 'action' => 'index']) ?></li>
+                    <li><?= $this->Html->link('大分類一覧', ['controller' => 'BigChapters', 'action' => 'index']) ?></li>
+                    <li><?= $this->Html->link('中分類一覧', ['controller' => 'MiddleChapters', 'action' => 'index']) ?></li>
+                    <li><?= $this->Html->link('小分類一覧', ['controller' => 'SmallChapters', 'action' => 'index']) ?></li>
+                </ul>
+                <ul>
+                    <li><?= $this->Html->link('勉強結果一覧', ['controller' => 'Studies', 'action' => 'index']) ?></li>
+                    <li><?= $this->Html->link('解析対象一覧', ['controller' => 'Projects', 'action' => 'index']) ?></li>
+                    <li><?= $this->Html->link('フォルダ構成', ['controller' => 'SourceCodes', 'action' => 'index']) ?></li>
+                    <li><?= $this->Html->link('解析結果一覧', ['controller' => 'Analyses', 'action' => 'index']) ?></li>
+                </ul>
                 <li><?= $this->Html->link('グラフ', ['controller' => 'Studies', 'action' => 'graph']) ?></li>
             </ul>
         </div>
