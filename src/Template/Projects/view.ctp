@@ -3,20 +3,7 @@
   * @var \App\View\AppView $this
   */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Project'), ['action' => 'edit', $project->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Project'), ['action' => 'delete', $project->id], ['confirm' => __('Are you sure you want to delete # {0}?', $project->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Projects'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Statuses'), ['controller' => 'Statuses', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Status'), ['controller' => 'Statuses', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Source Codes'), ['controller' => 'SourceCodes', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Source Code'), ['controller' => 'SourceCodes', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="projects view large-9 medium-8 columns content">
+<div class="projects view content">
     <h3><?= h($project->title) ?></h3>
     <table class="vertical-table">
         <tr>

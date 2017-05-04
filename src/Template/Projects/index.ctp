@@ -3,17 +3,8 @@
   * @var \App\View\AppView $this
   */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Project'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Statuses'), ['controller' => 'Statuses', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Status'), ['controller' => 'Statuses', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Source Codes'), ['controller' => 'SourceCodes', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Source Code'), ['controller' => 'SourceCodes', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="projects index large-9 medium-8 columns content">
+<div class="projects index content">
+    <?= $this->element('add_button') ?>
     <h3><?= __('Projects') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>

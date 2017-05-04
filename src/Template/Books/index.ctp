@@ -7,9 +7,7 @@
     <div class="add_button">
         <?= $this->Html->link('json読み込み', ['action' => 'json'], ['class'=>'button small radius']) ?>
     </div>
-    <div class="add_button">
-        <?= $this->Html->link('追加', ['action' => 'add'], ['id'=>'focus','class'=>'button small radius']) ?>
-    </div>
+    <?= $this->element('add_button') ?>
     <h3><?= __('Books') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <colgroup>
