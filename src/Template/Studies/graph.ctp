@@ -1,5 +1,4 @@
 <div class="studies graph content">
-    <h3>グラフ</h3>
     <form id="graph_form_day" action="<?= $this->Url->build(['controller'=>'Studies', 'action'=>'drawgraph']); ?>" method="post" data-cat="day">
         <div class="row">
             <div class="medium-3 columns">
@@ -17,6 +16,7 @@
         </div>
     </form>
     <div id="chart_div_day" style="width: 100%; height: 350px;"></div>
+    <div id="chart_div_day_o" style="width: 100%; height: 350px;"></div>
 
     <hr />
 

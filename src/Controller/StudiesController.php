@@ -306,8 +306,8 @@ class StudiesController extends AppController
 
         if($cat === 'studies') {
             $json_data = $this->_drawgraph_studies($start_date,$date_diff);
-        }else if ($cat === 'day'){
-            $json_data = $this->_drawgraph_day($start_date,$start_date_add,$date_diff,$compare_start_date,$compare_start_date_add);
+        }else if ($cat === 'day' || $cat === 'day_o'){
+            $json_data = $this->_drawgraph_day($start_date,$start_date_add,$date_diff,$compare_start_date,$compare_start_date_add,$cat);
         }
 
         $this->set(compact('json_data'));
@@ -369,7 +369,7 @@ class StudiesController extends AppController
         return $this->_json($data);
     }
 
-    private function _drawgraph_day($start_date,$start_date_add,$date_diff,$compare_start_date,$compare_start_date_add){
+    private function _drawgraph_day($start_date,$start_date_add,$date_diff,$compare_start_date,$compare_start_date_add,$cat){
         $tmp_start_date = $start_date->format('n/j');
         for($i=0;$i<count($compare_start_date);$i++) {
             $tmp_compare_start_date[$i] = $compare_start_date[$i]->format('n/j');
@@ -378,15 +378,8 @@ class StudiesController extends AppController
             $cnt[] = 0;
         }
         for ($i = 0; $i <= $date_diff; $i++) {
-            $query = $this->Studies
-                ->find()
-                ->where([
-                    'Studies.created BETWEEN :start AND :end'
-                ])
-                ->bind(':start', $start_date->format('Y-m-d'), 'date')
-                ->bind(':end', $start_date_add->format('Y-m-d'), 'date');
-            $query
-                ->select(['count' => $query->func()->count('*')]);
+
+            $query = $this->_getgraphcount($start_date,$start_date_add,$cat);
 
             foreach ($query as $val) {
                 $day_data[] = [$start_date->format('Y-m-d'),$val->count];
@@ -398,15 +391,8 @@ class StudiesController extends AppController
             }
 
             for ($j=0;$j<count($compare_start_date);$j++){
-                $compare_query = $this->Studies
-                    ->find()
-                    ->where([
-                        'Studies.created BETWEEN :start AND :end'
-                    ])
-                    ->bind(':start', $compare_start_date[$j]->format('Y-m-d'), 'date')
-                    ->bind(':end', $compare_start_date_add[$j]->format('Y-m-d'), 'date');
-                $compare_query
-                    ->select(['count' => $compare_query->func()->count('*')]);
+
+                $compare_query = $this->_getgraphcount($compare_start_date[$j],$compare_start_date_add[$j],$cat);
 
                 foreach ($compare_query as $compare_val) {
                     array_splice($day_data[$cnt[$j]],1,0,$compare_val->count);
@@ -426,6 +412,25 @@ class StudiesController extends AppController
         }
 
         return $this->_json($day_data);
+    }
+
+    private function  _getgraphcount($start_date,$start_date_add,$cat){
+        if($cat === 'day'){
+            $cat_where = '';
+        }elseif ($cat === 'day_o'){
+            $cat_where = 'Studies.status_id <> 4';
+        }
+
+        $query = $this->Studies
+            ->find()
+            ->where([
+                'Studies.created BETWEEN :start AND :end'
+            ])
+            ->bind(':start', $start_date->format('Y-m-d'), 'date')
+            ->bind(':end', $start_date_add->format('Y-m-d'), 'date')
+            ->where([$cat_where]);
+        return $query
+            ->select(['count' => $query->func()->count('*')]);
     }
 
     private function _json($data){

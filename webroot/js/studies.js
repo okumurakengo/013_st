@@ -12,7 +12,7 @@ $(function(){
     if($form_studies.length && $form_day.length) {
 
         var ajax_draw_exe = function (cat,status) {
-            var url,type,start_date,end_date,cat,past
+            var url,type,start_date,end_date,cat,past,status
 
             switch(cat){
                 case 'studies':
@@ -20,15 +20,14 @@ $(function(){
                     type = $form_studies.attr('method');
                     start_date = $('#start_date_studies').val();
                     end_date = $('#end_date_studies').val();
-                    cat = $form_studies.data('cat');
                     past = '';
                     break;
                 case 'day':
+                case 'day_o':
                     url = $form_day.attr('action');
                     type = $form_day.attr('method');
                     start_date = $('#start_date_day').val();
                     end_date = $('#end_date_day').val();
-                    cat = $form_day.data('cat');
                     past = $('#past').val();
                     break;
             }
@@ -51,7 +50,10 @@ $(function(){
                         google.charts.setOnLoadCallback(drawChart_studies(data));
                         break;
                     case 'day':
-                        google.charts.setOnLoadCallback(drawChart_day(data));
+                        google.charts.setOnLoadCallback(drawChart_day(data,'chart_div_day'));
+                        break;
+                    case 'day_o':
+                        google.charts.setOnLoadCallback(drawChart_day(data,'chart_div_day_o'));
                         break;
                 }
 
@@ -69,6 +71,7 @@ $(function(){
 
             ajax_draw_exe('studies','load');
             ajax_draw_exe('day','hide');
+            ajax_draw_exe('day_o','hide');
         };
 
         ajax_draw();
@@ -84,6 +87,7 @@ $(function(){
 
             showloader();
             ajax_draw_exe('day','button');
+            ajax_draw_exe('day_o','button');
         });
 
     }
@@ -130,7 +134,7 @@ $(function(){
         chart.draw(dataTable, options);
     }
 
-    function drawChart_day(data) {
+    function drawChart_day(data,target) {
         for(var i=0;i<data.length;i++){
             if(i !== 0) {
                 data[i][0] = new Date(data[i][0])
@@ -138,8 +142,20 @@ $(function(){
         }
         var data = google.visualization.arrayToDataTable(data);
 
+        var title;
+        switch (target){
+            case 'chart_div_day':
+                title = '1日の勉強量';
+                colors = ['#74DF00','#58ACFA','#F78181'];
+                break;
+            case 'chart_div_day_o':
+                title = '1日の勉強量(対象外以外)';
+                colors = ['#74DF00','#FE9A2E','#F781D8'];
+                break;
+        }
+
         var options = {
-            title: '1日の勉強量',
+            title: title,
             hAxis: {
                 title: '日時',
                 titleTextStyle: {color: '#333'},
@@ -147,10 +163,11 @@ $(function(){
             },
             vAxis: {
                 minValue: 0,
-            }
+            },
+            colors:colors
         };
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div_day'));
+        var chart = new google.visualization.AreaChart(document.getElementById(target));
         chart.draw(data, options);
     }
 
