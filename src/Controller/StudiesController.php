@@ -314,14 +314,14 @@ class StudiesController extends AppController
     }
 
     private function _drawgraph_studies($start_date,$date_diff){
+
         $start_date->modify('+1 days');
+
+        $studies_total_subquery = $this->_getstudiestotal();
+
         for ($i = 0; $i <= $date_diff; $i++) {
-            $studies_subquery = $this->Studies
-                ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
-                ->where("Studies.created <= '{$start_date->format('Y-m-d')}'");
-            $studies_subquery
-                ->select(['Books.id', 'count' => $studies_subquery->func()->count('*')])
-                ->group('Books.id');
+
+            $studies_subquery = $this->_getstudiestotal($start_date);
 
             $sm_count_subquery = TableRegistry::get('SmallChapters')
                 ->find('all', ['contain' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]);
@@ -332,6 +332,11 @@ class StudiesController extends AppController
             $studies = TableRegistry::get('Books')
                 ->find('all', [
                     'join' => [
+                        'StudiesTotalCount' => [
+                            'table' => $studies_total_subquery,
+                            'type' => 'LEFT',
+                            'conditions' => 'books.id = StudiesTotalCount.Books__id'
+                        ],
                         'StudiesCount' => [
                             'table' => $studies_subquery,
                             'type' => 'LEFT',
@@ -347,6 +352,7 @@ class StudiesController extends AppController
                 ->select([
                     'Books.id',
                     'Books.title',
+                    'StudiesTotalCount.count',
                     'StudiesCount.count',
                     'SmallCount.count',
                 ])
@@ -355,11 +361,13 @@ class StudiesController extends AppController
             $cnt = 0;
             foreach ($studies as $study) {
                 $count_data[$cnt]['title'] = $study->title;
-                $count_data[$cnt]['date']['Y'] = $start_date->format('Y');
-                $count_data[$cnt]['date']['m'] = $start_date->format('m');
-                $count_data[$cnt]['date']['d'] = $start_date->format('d');
+                $count_data[$cnt]['date'] = $start_date->format('Y-m-d');
                 $count_data[$cnt]['count'] = $study->StudiesCount['count'];
-                $count_data[$cnt]['schapter_total'] = $study->SmallCount['count'];
+                if ($study->StudiesTotalCount['count'] < $study->SmallCount['count']){
+                    $count_data[$cnt]['total'] = $study->SmallCount['count'];
+                }else{
+                    $count_data[$cnt]['total'] = $study->StudiesTotalCount['count'];
+                }
                 $cnt++;
             }
             $data[] = $count_data;
@@ -412,6 +420,20 @@ class StudiesController extends AppController
         }
 
         return $this->_json($day_data);
+    }
+
+    private function  _getstudiestotal($start_date = null){
+
+        if(isset($start_date)) {
+            $start_date = "Studies.created <= '{$start_date->format('Y-m-d')}'";
+        }
+
+        $studies_subquery = $this->Studies
+            ->find('all', ['contain' => ['SmallChapters' => ['MiddleChapters' => ['BigChapters' => ['Books']]]]])
+            ->where($start_date);
+        return $studies_subquery
+            ->select(['Books.id', 'count' => $studies_subquery->func()->count('*')])
+            ->group('Books.id');
     }
 
     private function  _getgraphcount($start_date,$start_date_add,$cat){

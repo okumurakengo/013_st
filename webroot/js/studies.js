@@ -103,14 +103,12 @@ $(function(){
         var subrows = [];
         $.each(data, function (i, value) {
             subrows = [
-                new Date(value[0].date.Y,
-                    value[0].date.m - 1,
-                    value[0].date.d),
+                new Date(value[0].date)
             ];
             $.each(data[0], function (j, value2) {
                 subrows.push(
                     (Math.floor(
-                            (value[j].count / value[j].schapter_total) * 1000)
+                            (value[j].count / value[j].total) * 1000)
                     ) / 10
                 );
             });
@@ -125,10 +123,7 @@ $(function(){
             hAxis: {
                 title: '日付',
                 format: 'M/d'
-            },
-            vAxis: {
-                title: '%'
-            },
+            }
         };
         var chart = new google.visualization.LineChart(document.getElementById('chart_div_studies'));
         chart.draw(dataTable, options);
