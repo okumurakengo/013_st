@@ -11,6 +11,8 @@ use App\Controller\AppController;
 class ProjectsController extends AppController
 {
 
+    public $components = ['ProjectsMethods'];
+
     /**
      * Index method
      *
@@ -21,7 +23,11 @@ class ProjectsController extends AppController
         $this->paginate = [
             'contain' => ['Statuses']
         ];
-        $projects = $this->paginate($this->Projects);
+        $projects = $this->paginate(
+            $this->Projects
+                ->find()
+                ->order(['projects.display_order' => 'asc'])
+        );
 
         $this->set(compact('projects'));
         $this->set('_serialize', ['projects']);
@@ -54,6 +60,10 @@ class ProjectsController extends AppController
         $project = $this->Projects->newEntity();
         if ($this->request->is('post')) {
             $this->request->data['select_flg'] = 1;
+            $this->request->data['status_id'] = 1;
+
+            $this->ProjectsMethods->ProjectsDisplayorderChange($this->request->data['display_order']);
+
             $project = $this->Projects->patchEntity($project, $this->request->data);
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));
@@ -63,7 +73,9 @@ class ProjectsController extends AppController
             $this->Flash->error(__('The project could not be saved. Please, try again.'));
         }
         $statuses = $this->Projects->Statuses->find('list', ['limit' => 200]);
-        $this->set(compact('project', 'statuses'));
+
+        $select_display_order = $this->ProjectsMethods->ProjectsDisplyaOrderPulldownCreate();
+        $this->set(compact('project', 'statuses','select_display_order'));
         $this->set('_serialize', ['project']);
     }
 
@@ -89,7 +101,11 @@ class ProjectsController extends AppController
             $this->Flash->error(__('The project could not be saved. Please, try again.'));
         }
         $statuses = $this->Projects->Statuses->find('list', ['limit' => 200]);
-        $this->set(compact('project', 'statuses'));
+
+        $select_display_order = $this->ProjectsMethods->ProjectsDisplyaOrderPulldownCreate();
+        $select_status = $this->ProjectsMethods->StatusPulldownCreate();
+
+        $this->set(compact('project', 'statuses','select_display_order','select_status'));
         $this->set('_serialize', ['project']);
     }
 
@@ -104,6 +120,8 @@ class ProjectsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $project = $this->Projects->get($id);
+
+        $this->ProjectsMethods->ProjectsDisplayorderChange($project->display_order);
         if ($this->Projects->delete($project)) {
             $this->Flash->success(__('The project has been deleted.'));
         } else {

@@ -7,13 +7,12 @@
     <?= $this->Form->create($project) ?>
     <fieldset>
         <legend><?= __('Edit Project') ?></legend>
-        <?php
-            echo $this->Form->input('title');
-            echo $this->Form->input('url');
-            echo $this->Form->input('display_order');
-            echo $this->Form->input('status_id', ['options' => $statuses]);
-            echo $this->Form->input('select_flg');
-        ?>
+        <div class="row">
+            <div class="medium-12 columns"><?= $this->Form->input('title') ?></div>
+            <div class="medium-12 columns"><?= $this->Form->input('url') ?></div>
+            <div class="medium-6 columns"><?= $this->Form->select('display_order',$select_display_order) ?></div>
+            <div class="medium-6 columns"><?= $this->Form->select('status_id' ,$select_status) ?></div>
+        </div>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

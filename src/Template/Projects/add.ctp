@@ -10,8 +10,7 @@
         <?php
             echo $this->Form->input('title');
             echo $this->Form->input('url');
-            echo $this->Form->input('display_order');
-            echo $this->Form->input('status_id', ['options' => $statuses]);
+            echo $this->Form->select('display_order',$select_display_order);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -13,6 +13,8 @@ use Cake\I18n\Time;
 class BooksController extends AppController
 {
 
+    public $components = ['BooksMethods'];
+
     /**
      * Index method
      *
@@ -53,8 +55,7 @@ class BooksController extends AppController
         if ($this->request->is('post')) {
 
             // 表示順変更処理
-            $display_order = $this->request->data['display_order'];
-            $this->_displayorderNew($display_order);
+            $this->BooksMethods->BooksDisplayorderChange($this->request->data['display_order']);
 
             $this->request->data["select_flg"] = 1;
             $book = $this->Books->patchEntity($book, $this->request->data);
@@ -67,15 +68,7 @@ class BooksController extends AppController
         }
 
         // 表示順番のプルダウン
-        $queryBooks = $this->Books;
-        $arr_display_order = $queryBooks
-            ->find()
-            ->select(['title','display_order'])
-            ->order(['display_order' => 'ASC']);
-        $select_display_order[1] = "最初に表示する";
-        foreach ($arr_display_order as $value) {
-            $select_display_order[$value['display_order']+1]='「'.$value['display_order'].'. '.$value['title'].'」の次に表示する';
-        }
+        $select_display_order = $this->BooksMethods->BooksDisplyaOrderPulldownCreate();
         $this->set(compact('select_display_order'));
         $this->set(compact('book'));
         $this->set('_serialize', ['book']);
@@ -110,25 +103,9 @@ class BooksController extends AppController
             $this->Flash->error(__('The book could not be saved. Please, try again.'));
         }
 
-        $queryBooks = $this->Books;
-        // 表示順番のプルダウン
-        $arr_display_order = $queryBooks
-            ->find()
-            ->select(['id','title','display_order'])
-            ->order(['display_order' => 'ASC']);
-        $i = 1;
-        $select_display_order[$i] = "最初に表示する";
-        foreach ($arr_display_order as $value) {
-            $select_display_order[$i++] = '「' . $value['display_order'] . '. ' . $value['title'] . '」の次に表示する';
-        }
-        $Statuses = TableRegistry::get('Statuses');
-        $arr_status = $Statuses
-            ->find()
-            ->select(['id','title'])
-            ->order(['display_order' => 'ASC']);
-        foreach ($arr_status as $value) {
-            $select_status[$value->id] = $value->title;
-        }
+        $select_display_order = $this->BooksMethods->BooksDisplyaOrderPulldownCreate();
+        $select_status = $this->BooksMethods->StatusPulldownCreate();
+
         $this->set(compact(
             'select_display_order',
             'select_status'
@@ -148,6 +125,9 @@ class BooksController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $book = $this->Books->get($id);
+
+        $this->BooksMethods->BooksDisplayorderChange($book->display_order);
+
         if ($this->Books->delete($book)) {
             $this->Flash->success(__('The book has been deleted.'));
         } else {
@@ -351,26 +331,6 @@ class BooksController extends AppController
 
         $this->set(compact('books'));
 
-    }
-
-    /**
-     * 新しい本を挿入した際の他の本の表示順番を変更する
-     * @param $display_order 新しい順番
-     */
-    public function _displayorderNew($display_order) {
-        $Books_data = $this->Books
-            ->find()
-            ->select(['id','display_order'])
-            ->where("display_order >= $display_order")
-            ->order(['display_order' => 'DESC']);
-        foreach ($Books_data as $value) {
-            $update_date = $this->Books
-                ->find('all')
-                ->where(['id' => $value['id']])
-                ->first();
-            $update_date->display_order = $value->display_order + 1;
-            $this->Books->save($update_date);
-        }
     }
 
     /**

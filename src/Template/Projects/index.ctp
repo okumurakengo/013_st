@@ -7,6 +7,12 @@
     <?= $this->element('add_button') ?>
     <h3><?= __('Projects') ?></h3>
     <table cellpadding="0" cellspacing="0">
+        <colgroup>
+            <col width="50">
+            <col width="10">
+            <col width="20">
+            <col width="20">
+        </colgroup>
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('title') ?></th>
@@ -17,10 +23,12 @@
         </thead>
         <tbody>
             <?php foreach ($projects as $project): ?>
-            <tr>
-                <td><?= h($project->title) ?></td>
-                <td><?= $project->has('status') ? $this->Html->link($project->status->title, ['controller' => 'Statuses', 'action' => 'view', $project->status->id]) : '' ?></td>
-                <td><?= h($project->created) ?></td>
+            <tr class="<?= $this->Projects->status_tr_class($project->status->id) ?>">
+                <td><?= $this->Projects->site_judgment($project->url,$project->title) ?></td>
+                <td class="<?= $this->Projects->status_td_class($project->status->id) ?>">
+                    <?= $project->has('status') ? $this->Html->link($project->status->title, ['controller' => 'Statuses', 'action' => 'view', $project->status->id]) : '' ?>
+                </td>
+                <td><?= h($this->Projects->date_format($project->created)) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $project->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $project->id]) ?>

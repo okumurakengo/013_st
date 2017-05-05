@@ -59,12 +59,15 @@ code {
     padding: 0 1em;
 }
 
-.books_done{
+.status_normal{
+    background: transparent;
+}
+.status_done{
     background: #aaa !important;
 }
-.books_hold{
+.status_hold{
     background: #AED5AC !important;
 }
-.books_new{
+.status_new{
     background: #FFFF6A;
 }

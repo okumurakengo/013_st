@@ -3,18 +3,7 @@
   * @var \App\View\AppView $this
   */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Book'), ['action' => 'edit', $book->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Book'), ['action' => 'delete', $book->id], ['confirm' => __('Are you sure you want to delete # {0}?', $book->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Books'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Book'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Big Chapters'), ['controller' => 'BigChapters', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Big Chapter'), ['controller' => 'BigChapters', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="books view large-9 medium-8 columns content">
+<div class="books view content">
     <h3><?= h($book->title) ?></h3>
     <table class="vertical-table">
         <tr>
