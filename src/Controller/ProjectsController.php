@@ -53,6 +53,7 @@ class ProjectsController extends AppController
     {
         $project = $this->Projects->newEntity();
         if ($this->request->is('post')) {
+            $this->request->data['select_flg'] = 1;
             $project = $this->Projects->patchEntity($project, $this->request->data);
             if ($this->Projects->save($project)) {
                 $this->Flash->success(__('The project has been saved.'));

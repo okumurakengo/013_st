@@ -67,10 +67,6 @@ class ProjectsTable extends Table
             ->notEmpty('title');
 
         $validator
-            ->requirePresence('url', 'create')
-            ->notEmpty('url');
-
-        $validator
             ->integer('display_order')
             ->requirePresence('display_order', 'create')
             ->notEmpty('display_order');

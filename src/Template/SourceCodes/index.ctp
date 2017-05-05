@@ -9,30 +9,24 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('project_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('source_code_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('directory_flg') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('display_order') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('select_flg') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($sourceCodes as $sourceCode): ?>
             <tr>
-                <td><?= $this->Number->format($sourceCode->id) ?></td>
                 <td><?= $sourceCode->has('project') ? $this->Html->link($sourceCode->project->title, ['controller' => 'Projects', 'action' => 'view', $sourceCode->project->id]) : '' ?></td>
                 <td><?= $this->Number->format($sourceCode->source_code_id) ?></td>
                 <td><?= h($sourceCode->directory_flg) ?></td>
                 <td><?= h($sourceCode->name) ?></td>
                 <td><?= $this->Number->format($sourceCode->display_order) ?></td>
-                <td><?= h($sourceCode->select_flg) ?></td>
                 <td><?= h($sourceCode->created) ?></td>
-                <td><?= h($sourceCode->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $sourceCode->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $sourceCode->id]) ?>

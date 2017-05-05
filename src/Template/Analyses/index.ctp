@@ -10,14 +10,10 @@
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('source_code_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('status_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('content') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('display_order') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('select_flg') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -25,14 +21,10 @@
             <?php foreach ($analyses as $analysis): ?>
             <tr>
                 <td><?= $this->Number->format($analysis->id) ?></td>
-                <td><?= $analysis->has('user') ? $this->Html->link($analysis->user->name, ['controller' => 'Users', 'action' => 'view', $analysis->user->id]) : '' ?></td>
                 <td><?= $analysis->has('source_code') ? $this->Html->link($analysis->source_code->name, ['controller' => 'SourceCodes', 'action' => 'view', $analysis->source_code->id]) : '' ?></td>
-                <td><?= $analysis->has('status') ? $this->Html->link($analysis->status->id, ['controller' => 'Statuses', 'action' => 'view', $analysis->status->id]) : '' ?></td>
+                <td><?= $analysis->has('status') ? $this->Html->link($analysis->status->title, ['controller' => 'Statuses', 'action' => 'view', $analysis->status->id]) : '' ?></td>
                 <td><?= h($analysis->content) ?></td>
-                <td><?= $this->Number->format($analysis->display_order) ?></td>
-                <td><?= h($analysis->select_flg) ?></td>
                 <td><?= h($analysis->created) ?></td>
-                <td><?= h($analysis->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $analysis->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $analysis->id]) ?>
